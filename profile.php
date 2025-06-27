@@ -1,3 +1,13 @@
+<?php 
+include('db.php');
+session_start();
+$name = $_SESSION['name'];
+$d_o_b = $_SESSION['d_o_b'];
+$phone_no = $_SESSION['phone_no'];
+$email = $_SESSION['email'];
+$profile_pic = $_SESSION['profile_pic'];
+$password = $_SESSION['password'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,20 +100,20 @@
   <div class="continer">
     <div class="form-continer">
       <div class="profile-pic">
-        <img id="pic" src="img/profile_pic.jpeg" alt="Profile Picture" />
+        <img id="pic" src="img/<?php echo$profile_pic; ?>" alt="Profile Picture" />
       </div>
 
       <div class="title-value">Name:</div>
-      <div class="input-value">Harsh Ranjan</div>
+      <div class="input-value"><?php echo$name; ?></div>
 
       <div class="title-value">D.O.B:</div>
-      <div class="input-value">26-6-2007</div>
+      <div class="input-value"><?php echo$d_o_b; ?></div>
 
       <div class="title-value">Phone No.:</div>
-      <div class="input-value">+91 9431768242</div>
+      <div class="input-value"><?php echo$phone_no; ?></div>
 
       <div class="title-value">Email:</div>
-      <div class="input-value">harshranjan1644@gmail.com</div>
+      <div class="input-value"><?php echo$email; ?>"</div>
 
       <div class="button-three">
         <a href="#" class="btn">Update</a>
