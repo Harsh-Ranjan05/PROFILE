@@ -1,6 +1,43 @@
 <?php 
 include('db.php');
+session_start();
+$name = $_SESSION['name'];
+$d_o_b = $_SESSION['d_o_b'];
+$phone_no = $_SESSION['phone_no'];
+$email = $_SESSION['email'];
+$profile_pic = $_SESSION['profile_pic'];
+
+if (isset($_POST['submit'])) {
+  $_SESSION['name'] = $_POST['name'];
+  $_SESSION['d_o_b'] = $_POST['d_o_b'];
+  $_SESSION['phone_no'] = $_POST['phone_no'];
+  $_SESSION['email'] = $_POST['email'];
+  $temp = $_FILES['profile_pic']['tmp_name'];
+  $profile_pic = $_FILES['profile_pic']['name'];
+  move_uploaded_file($temp, "img/$profile_pic");
+
+  $query = "UPDATE register SET name='{$_SESSION['name']}', d_o_b='{$_SESSION['d_o_b']}', phone_no='{$_SESSION['phone_no']}', email='{$_SESSION['email']}', profile_pic='{$_SESSION['profile_pic']}' WHERE email='{$_SESSION['email']}'";
+  
+  $result = pg_query($conn, $query);
+
+  if ($result) {
 ?>
+    <script type="text/javascript">
+        alert("Profile Update Successfully..");
+        window.location = "profile.php";
+    </script>
+<?php
+  } else {
+?>
+    <script type="text/javascript">
+        alert("Failed Update");
+        window.location = "update.php";
+    </script>
+<?php
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,35 +116,31 @@ include('db.php');
 </head>
 <body>
   <div class="continer">
-    <div class="form-continer">
+    <form method="POST" enctype="multipart/form-data" class="form-continer">
       <div class="input-box">
         <label>Name</label>
-        <input id="int" type="text">
+        <input name="name" value ="<?php echo $name; ?>"id="int" type="text">
       </div>
       <div class="input-box">
         <label>D.O.B</label>
-        <input id="int" type="text">
+        <input name="d_o_b"  value ="<?php echo $d_o_b; ?>"id="int" type="date">
       </div>
       <div class="input-box">
         <label>Phone No.</label>
-        <input id="int" type="text">
+        <input name="phone_no"  value ="<?php echo $phone_no; ?>"id="int" type="text">
       </div>
       <div class="input-box">
-        <label>Email </label>
-        <input id="int" type="text">
+        <label>Email</label>
+        <input name="email"  value ="<?php echo $email; ?>"id="int" type="text">
       </div>
       <div class="input-box">
         <label>Upload Profile</label>
-        <input id="int" type="file">
-      </div>
-      <div class="input-box">
-           <label>Passsword</label>
-           <input id="int" type="password">
+        <input name="profile_pic"  value ="<?php echo $profile_pic; ?>"id="int" type="file">
       </div>
       <div class="button">
-        <button id="btn" type="button">Register</button>
+        <button name="submit" id="btn" type="submit">Register</button>
       </div>
-    </div>
+    </form>
   </div>
 </body>
 </html>
