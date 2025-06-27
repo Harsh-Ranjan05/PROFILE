@@ -1,40 +1,46 @@
 <?php 
 include('db.php');
 session_start();
-if(isset($_POST['submit'])){
+
+if (isset($_POST['submit'])) {
   $name = $_POST['name'];
   $d_o_b = $_POST['d_o_b'];
-  $phone_on =$_POST['phone_no'];
+  $phone_no = $_POST['phone_no'];
   $email = $_POST['email'];
-  $temp = $_FILES['profile_pic']['temp_name'];
-  $profile_pic = $_['profile_pic']['name'];
-  move_uploaded_file($temp,"img/$profile_pic");
+  $temp = $_FILES['profile_pic']['tmp_name'];
+  $profile_pic = $_FILES['profile_pic']['name'];
+  move_uploaded_file($temp, "img/$profile_pic");
   $password = $_POST['password'];
-  $query="INSERT INTO register(name,d_o_b,phone_no,email,profile_pic,password) VALUES('$name','$d_o_b','$phone_no','$email','$profile_pic','$password')";
+
+  $query = "INSERT INTO register(name, d_o_b, phone_no, email, profile_pic, password) 
+            VALUES('$name', '$d_o_b', '$phone_no', '$email', '$profile_pic', '$password')";
+  
   $result = pg_query($conn, $query);
-  if($result){
-    $name = $_SESSION['name'];
-    $d_o_b = $_SESSION['d_o_b'];
-    $phone_no = $_SESSION['phone_no'];
-    $email = $_SESSION['email'];
-    $profile_pic = $_SESSION['profile_pic'];
-    $password = $_SESSION['password'];
- ?>
-        <script type="text/javascript">
-            alert("Register Sucessfully..");
-            window.location = "login.php";
-        </script>
-        <?php
-  }else{
-    ?>
-        <script type="text/javascript">
-            alert("Failed To Register");
-            window.location = "register.php";
-        </script>
-        <?php
+
+  if ($result) {
+    $_SESSION['name'] = $name;
+    $_SESSION['d_o_b'] = $d_o_b;
+    $_SESSION['phone_no'] = $phone_no;
+    $_SESSION['email'] = $email;
+    $_SESSION['profile_pic'] = $profile_pic;
+    $_SESSION['password'] = $password;
+?>
+    <script type="text/javascript">
+        alert("Register Successfully..");
+        window.location = "login.php";
+    </script>
+<?php
+  } else {
+?>
+    <script type="text/javascript">
+        alert("Failed To Register");
+        window.location = "register.php";
+    </script>
+<?php
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,21 +119,21 @@ if(isset($_POST['submit'])){
 </head>
 <body>
   <div class="continer">
-    <form method="POST" class="form-continer">
+    <form method="POST" enctype="multipart/form-data" class="form-continer">
       <div class="input-box">
         <label>Name</label>
         <input name="name" id="int" type="text">
       </div>
       <div class="input-box">
         <label>D.O.B</label>
-        <input name ="d_o_b" id="int" type="date">
+        <input name="d_o_b" id="int" type="date">
       </div>
       <div class="input-box">
         <label>Phone No.</label>
         <input name="phone_no" id="int" type="text">
       </div>
       <div class="input-box">
-        <label>Email </label>
+        <label>Email</label>
         <input name="email" id="int" type="text">
       </div>
       <div class="input-box">
@@ -135,13 +141,13 @@ if(isset($_POST['submit'])){
         <input name="profile_pic" id="int" type="file">
       </div>
       <div class="input-box">
-           <label>Passsword</label>
-           <input name="password" id="int" type="password">
+        <label>Password</label>
+        <input name="password" id="int" type="password">
       </div>
       <div class="button">
-        <button name ="submit" id="btn" type="button">Register</button>
+        <button name="submit" id="btn" type="submit">Register</button>
       </div>
-  </form>
+    </form>
   </div>
 </body>
 </html>
