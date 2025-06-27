@@ -1,5 +1,36 @@
 <?php 
 include('db.php');
+session_start();
+if(isset($_POST['submit'])){
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $query="SELECT*FROM register WHERE email='$email' AND password='$password'";
+  $result = pg_query($conn, $query);
+  $total = pg_num_rows($result);
+  if($total>0){
+    $row = pg_fetch_assoc($result);
+    $_SESSION['name'] = $row['name'];
+    $_SESSION['d_o_b'] = $row['d_o_b'];
+    $_SESSION['phone_no'] = $row['phone_no'];
+    $_SESSION['email'] = $row['email'];
+    $_SESSION['profile_pic'] = $row['profile_pic'];
+    $_SESSION['password'] = $row['password'];
+    ?>
+    <script type="text/javascript">
+        alert("Login Successfully..");
+        window.location = "profile.php";
+    </script>
+<?php
+  }
+  else{
+    ?>
+    <script type="text/javascript">
+        alert("Failed To Login..");
+        window.location = "login.php";
+    </script>
+<?php
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,19 +110,19 @@ include('db.php');
 </head>
 <body>
   <div class="continer">
-    <div class="form-continer">
+    <form method="POST" enctype="multipart/form-data" class="form-continer">
       <div class="input-box">
         <label>Email </label>
-        <input id="int" type="text">
+        <input name="email" id="int" type="text">
       </div>
        <div class="input-box">
             <label>Password</label>
-            <input id="int" type="password">
+            <input name="password" id="int" type="password">
       </div>
       <div class="button">
-        <button id="btn" type="button">Login</button>
+        <button id="btn" name="submit" type="submit">Login</button>
       </div>
-    </div>
+  </form>
   </div>
 </body>
 </html>
