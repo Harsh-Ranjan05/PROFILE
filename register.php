@@ -1,5 +1,39 @@
 <?php 
 include('db.php');
+session_start();
+if(isset($_POST['submit'])){
+  $name = $_POST['name'];
+  $d_o_b = $_POST['d_o_b'];
+  $phone_on =$_POST['phone_no'];
+  $email = $_POST['email'];
+  $temp = $_FILES['profile_pic']['temp_name'];
+  $profile_pic = $_['profile_pic']['name'];
+  move_uploaded_file($temp,"img/$profile_pic");
+  $password = $_POST['password'];
+  $query="INSERT INTO register(name,d_o_b,phone_no,email,profile_pic,password) VALUES('$name','$d_o_b','$phone_no','$email','$profile_pic','$password')";
+  $result = pg_query($conn, $query);
+  if($result){
+    $name = $_SESSION['name'];
+    $d_o_b = $_SESSION['d_o_b'];
+    $phone_no = $_SESSION['phone_no'];
+    $email = $_SESSION['email'];
+    $profile_pic = $_SESSION['profile_pic'];
+    $password = $_SESSION['password'];
+ ?>
+        <script type="text/javascript">
+            alert("Register Sucessfully..");
+            window.location = "login.php";
+        </script>
+        <?php
+  }else{
+    ?>
+        <script type="text/javascript">
+            alert("Failed To Register");
+            window.location = "register.php";
+        </script>
+        <?php
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,35 +113,35 @@ include('db.php');
 </head>
 <body>
   <div class="continer">
-    <div class="form-continer">
+    <form method="POST" class="form-continer">
       <div class="input-box">
         <label>Name</label>
-        <input id="int" type="text">
+        <input name="name" id="int" type="text">
       </div>
       <div class="input-box">
         <label>D.O.B</label>
-        <input id="int" type="text">
+        <input name ="d_o_b" id="int" type="date">
       </div>
       <div class="input-box">
         <label>Phone No.</label>
-        <input id="int" type="text">
+        <input name="phone_no" id="int" type="text">
       </div>
       <div class="input-box">
         <label>Email </label>
-        <input id="int" type="text">
+        <input name="email" id="int" type="text">
       </div>
       <div class="input-box">
         <label>Upload Profile</label>
-        <input id="int" type="file">
+        <input name="profile_pic" id="int" type="file">
       </div>
       <div class="input-box">
            <label>Passsword</label>
-           <input id="int" type="password">
+           <input name="password" id="int" type="password">
       </div>
       <div class="button">
-        <button id="btn" type="button">Register</button>
+        <button name ="submit" id="btn" type="button">Register</button>
       </div>
-    </div>
+  </form>
   </div>
 </body>
 </html>
